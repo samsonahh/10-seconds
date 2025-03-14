@@ -2,13 +2,9 @@
 
 public class PlayerWalkState : PlayerState
 {
-    public float WalkSpeed = 5f;
-    public float CurrentSpeed { get; private set; }
-    float animatorMoveSpeed;
-
     public override void OnEnter()
     {
-
+        player.Animator.CrossFadeInFixedTime("Movement", 0.1f);
     }
 
     public override void OnExit()
@@ -18,17 +14,17 @@ public class PlayerWalkState : PlayerState
 
     public override void OnUpdate()
     {
-        HandleAnimatorMoveSpeed();
+        if (player.MoveDirection.sqrMagnitude == 0)
+        {
+            player.ChangeState(player.PlayerIdleState);
+            return;
+        }
+
+        player.HandleAnimatorMoveSpeed(1f);
     }
 
     public override void OnFixedUpdate()
     {
-
-    }
-
-    void HandleAnimatorMoveSpeed()
-    {
-        animatorMoveSpeed = Mathf.Lerp(animatorMoveSpeed, CurrentSpeed, 10f * Time.deltaTime);
-        player.Animator.SetFloat("MoveSpeed", animatorMoveSpeed);
+        player.Rigidbody.MovePosition(player.transform.position + player.WalkSpeed * Time.fixedDeltaTime * player.MoveDirection);
     }
 }
