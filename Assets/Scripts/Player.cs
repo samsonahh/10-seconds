@@ -8,7 +8,6 @@ public class Player : MonoBehaviour
 
     [Header("Movement")]
     public Vector3 MoveDirection { get; private set; }
-    public float WalkSpeed = 3f;
     float animatorMoveSpeed;
 
     [Header("States")]
